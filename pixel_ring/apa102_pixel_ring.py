@@ -13,17 +13,12 @@ from .pattern import Echo, GoogleHome, Custom
 class PixelRing(object):
     PIXELS_N = 12
     
-    def pattern = {
-        'google': self.pattern = GoogleHome(show=self.show),
-        'echo': self.pattern = Echo(show=self.show),
-        'custom': self.pattern = Custom(show=self.show)
-    }
     def pattern_switch(self, pattern):
         default = GoogleHome(show=self.show)
         return getattr(self, str(pattern), lambda: default)()
 
     def google(self):
-        return Google(show=self.show)
+        return GoogleHome(show=self.show)
 
     def echo(self):
         return Echo(show=self.show)
@@ -31,7 +26,7 @@ class PixelRing(object):
     def custom(self):
         return Custom(show=self.show)
 
-    def __init__(self, pattern)
+    def __init__(self, pattern = "google"):
         self.pattern = self.pattern_switch(pattern)
 
         self.dev = APA102(num_led=self.PIXELS_N)
