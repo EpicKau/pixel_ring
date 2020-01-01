@@ -7,17 +7,32 @@ except ImportError:
     import Queue as Queue
 
 from .apa102 import APA102
-from .pattern import Echo, GoogleHome
+from .pattern import Echo, GoogleHome, Custom
 
 
 class PixelRing(object):
     PIXELS_N = 12
+    
+    def pattern = {
+        'google': self.pattern = GoogleHome(show=self.show),
+        'echo': self.pattern = Echo(show=self.show),
+        'custom': self.pattern = Custom(show=self.show)
+    }
+    def pattern_switch(self, pattern):
+        default = GoogleHome(show=self.show)
+        return getattr(self, str(pattern), lambda: default)()
 
-    def __init__(self, pattern='google'):
-        if pattern == 'echo':
-            self.pattern = Echo(show=self.show)
-        else:
-            self.pattern = GoogleHome(show=self.show)
+    def google(self):
+        return Google(show=self.show)
+
+    def echo(self):
+        return Echo(show=self.show)
+
+    def custom(self):
+        return Custom(show=self.show)
+
+    def __init__(self, pattern)
+        self.pattern = self.pattern_switch(pattern)
 
         self.dev = APA102(num_led=self.PIXELS_N)
 
@@ -35,10 +50,7 @@ class PixelRing(object):
             self.dev.global_brightness = int(0b11111 * brightness / 100)
 
     def change_pattern(self, pattern):
-        if pattern == 'echo':
-            self.pattern = Echo(show=self.show)
-        else:
-            self.pattern = GoogleHome(show=self.show)
+        self.pattern = self.pattern_switch(pattern)
 
     def wakeup(self, direction=0):
         def f():
